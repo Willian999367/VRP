@@ -12,26 +12,6 @@ from folium import plugins # this line is needed for BeautifyIcon
 
 
 
-var3 = { 0 : "joinville, -26.3631553, -48.8283163",
-         1 : "araquari,  -26.3627797, -48.8254145",
-         2 : "jaragua,   -26.3651089,-48.8139691",
-         3 : "sfs,       -26.3638811, -48.8274835",
-         4 : "barra ,    -26.3651089,-48.8139691",
-         5 : "curitiba,  -26.3674473, -48.8310336",
-         6 : "matinhos,  -26.3739262,-48.8385038",
-         7 : "profipo,   -26.3495175,-48.8313656",
-         8 : "itinga,    -26.3531123,-48.8121246",
-         9 : "floresta,  -26.3651089,-48.8139691",
-        10 : "aventureiro,  -26.3512483,-48.8032469",
-        11 : "escolinha,    -26.3513485,-48.8071171",
-        12 : "boa vista,    -26.3465655, -48.8272675",
-        13 : "itaum,        -26.3513485,-48.8071171",
-        14 : "quero quero,  -26.3638256,-48.8133629",
-        15 : "pia pia,  -26.3497858,-48.8270138" ,
-        16 : "jjjjj,  -26.3651089,-48.8139691" ,
-    }
-
-
 cidades = [] 
 # Lista de cores utilizadas no sistema  
 cores = ["Yellow","Green","Red"]
@@ -93,7 +73,7 @@ class Index(View):
         for j in soma: 
             valor = (j[1])
             soma_total = soma_total + int(valor)
-            print(soma_total)
+
 
                 
         # Abaixo trata sequencia de visita e passar os valores de cor para mapa 
@@ -170,22 +150,33 @@ class Index(View):
 def busca(sequencia):
 
 
-    # Rota Selecionada
-    #for i in valor_id:
-    #    rota_selecioana = rota.objects.filter(nome_rota=i)
-    #    print(rota_selecioana)
+     #Rota Selecionada
+    for i in valor_id:
+        rota_selecioana = rota.objects.filter(nome_rota=i)
+
+
+
+    #   print("aquiii",x.valor)
 
     cidade = []
+    cidade1= []
     sequencia = sequencia.split('->')
     for x in sequencia:
-        for i in var3:
-            if int(x) == int(i):
-                cidade.append(var3[i])
+         for i in rota_selecioana:
+             if int(x) == i.sequecia:
+                 cidade1.append(i.valor)
+
+
+    #for x in sequencia:
+    #    for i in var3:
+    #        if int(x) == int(i):
+    #            cidade.append(var3[i])
 
     cidades.clear()
-    for i in cidade: 
+    for i in cidade1:
         x = i.split(',') 
         cidades.append(x)
+
 
 def cor(): 
 
@@ -210,17 +201,12 @@ def create_data_model():
     data = {}
     data['distance_matrix'] = [
     ] 
-    data['num_vehicles'] = 1
+    data['num_vehicles'] = 2
     data['depot'] = 0
 
      #Rota Selecionada
     for i in valor_id:
         rota_selecioana = rota.objects.filter(nome_rota=i)
-        print(rota_selecioana)
-
-    #rota_selecioana = rota.objects.filter(nome_rota="sul")
-    #print(rota_selecioana)
-
 
     # Separar as cidades que precisam ser visitadas
     cidade_visitadas = []
@@ -275,6 +261,7 @@ def create_data_model():
         if len(cidade_destino) != 0:
             cidade_des.append(cidade_destino) 
             cidade_destino = [] 
+
 
 
         # Alimenta a matriz do algoritimo de roteiro 
@@ -339,10 +326,10 @@ def print_solution(data, manager, routing, solution):
                 previous_index, index, vehicle_id)
         plan_output += '{}\n'.format(manager.IndexToNode(index))
         plan_output += 'Distancia: {}\n'.format(route_distance)  
-       # print(plan_output)      
+        print(plan_output)
         lista_vrp.append(plan_output)
         max_route_distance = max(route_distance, max_route_distance)
-    #print('Maximum of the route distances: {}m'.format(max_route_distance))
+    print('Maximum of the route distances: {}m'.format(max_route_distance))
 
 
 

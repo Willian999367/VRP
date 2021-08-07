@@ -21,6 +21,8 @@ class rota(models.Model):
     primeiro = models.BooleanField(default=False)
     sequecia = models.IntegerField(blank = True)
     ativo = models.BooleanField(default=True)
+    valor = models.CharField(max_length=200)
+
 
     def __str__(self):
         return self.nome_rota
