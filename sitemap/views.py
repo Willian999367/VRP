@@ -12,7 +12,6 @@ from folium import plugins # this line is needed for BeautifyIcon
 
 
 
-
 var3 = { 0 : "joinville, -26.3631553, -48.8283163",
          1 : "araquari,  -26.3627797, -48.8254145",
          2 : "jaragua,   -26.3651089,-48.8139691",
@@ -33,7 +32,6 @@ var3 = { 0 : "joinville, -26.3631553, -48.8283163",
     }
 
 
-
 cidades = [] 
 # Lista de cores utilizadas no sistema  
 cores = ["Yellow","Green","Red"]
@@ -46,13 +44,16 @@ cor_max = ""
 lista_vrp = [] 
 cor_lista = []    
 valores = [] 
-
+valor_id = []
 
 
 class Index(View): 
-    def get(self,request):
+    def get(self,request,id):
     
         # Mapa tela inicial 
+        valor_id.append(id)
+
+
         m = folium.Map( location = [-26.358612,-48.8356497], zoon_start=5 )
         
         main() # Chama a função de roteamento 
@@ -167,10 +168,16 @@ class Index(View):
 
 
 def busca(sequencia):
-    
-    cidade = [] 
+
+
+    # Rota Selecionada
+    #for i in valor_id:
+    #    rota_selecioana = rota.objects.filter(nome_rota=i)
+    #    print(rota_selecioana)
+
+    cidade = []
     sequencia = sequencia.split('->')
-    for x in sequencia:      
+    for x in sequencia:
         for i in var3:
             if int(x) == int(i):
                 cidade.append(var3[i])
@@ -199,18 +206,25 @@ def cor():
 
 def create_data_model():
 
-    '''
+
     data = {}
     data['distance_matrix'] = [
     ] 
     data['num_vehicles'] = 1
     data['depot'] = 0
 
-     #Rota Selecionada 
-    rota_selecioana = rota.objects.filter(nome_rota="sul")   
+     #Rota Selecionada
+    for i in valor_id:
+        rota_selecioana = rota.objects.filter(nome_rota=i)
+        print(rota_selecioana)
 
-         # Separar as cidades que precisam ser visitadas 
-    cidade_visitadas = [] 
+    #rota_selecioana = rota.objects.filter(nome_rota="sul")
+    #print(rota_selecioana)
+
+
+    # Separar as cidades que precisam ser visitadas
+    cidade_visitadas = []
+
     for i in rota_selecioana:        
             cidade_visitadas.append(i.cidade) 
     
@@ -271,8 +285,13 @@ def create_data_model():
             data['distance_matrix'].append(x)
 
         return data
-'''
-    """Stores the data for the problem."""
+
+
+# Abaixo o código original
+"""Stores the data for the problem."""
+
+'''    
+    
     data = {}
     data['distance_matrix'] = [
 
@@ -301,8 +320,7 @@ def create_data_model():
 
     return data
 
-    
-
+'''
 
 
 def print_solution(data, manager, routing, solution):
